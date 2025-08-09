@@ -1,5 +1,40 @@
-node_modules
-dist
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build output
+dist/
+build/
+
+# Vite cache
+.cache/
+vite.config.ts.timestamp-*
+vite.config.js.timestamp-*
+
+# Editor & OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Environment variables
 .env
-.cache
+.env.local
+.env.*.local
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Yarn v3+ zero-installs (optional)
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
 
