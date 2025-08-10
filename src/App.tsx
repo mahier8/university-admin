@@ -2,10 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import LoginPage from "./pages/auth/LoginPage";
 import { ProtectedRoute } from "./router/ProtectedRoute";
-import SuperAdminDashboard from "./pages/dashboard/SuperAdminDashboard";
-import AdminDashboard from "./pages/dashboard/AdminDashboard";
-import StudentDashboard from "./pages/dashboard/StudentDashboard";
-import { useAuth } from "./contexts/AuthContext";
+import DashboardPage from "./pages/dashboard/DashboardPage";
+import CoursesPage from "./pages/courses/CoursesPage";
 
 export default function App() {
   return (
@@ -17,7 +15,15 @@ export default function App() {
             path="/dashboard"
             element={
               <ProtectedRoute allowedRoles={["superadmin", "admin", "student"]}>
-                <RoleBasedDashboard />
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/courses"
+            element={
+              <ProtectedRoute allowedRoles={["superadmin", "admin", "student"]}>
+                <CoursesPage />
               </ProtectedRoute>
             }
           />
@@ -27,11 +33,3 @@ export default function App() {
     </Router>
   );
 }
-
-const RoleBasedDashboard = () => {
-  const { user } = useAuth();
-  if (!user) return null;
-  if (user.role === "superadmin") return <SuperAdminDashboard />;
-  if (user.role === "admin") return <AdminDashboard />;
-  return <StudentDashboard />;
-};
