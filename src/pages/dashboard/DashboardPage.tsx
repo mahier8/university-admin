@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { useAuth } from "../../contexts/AuthContext";
 import Sidebar from "../../components/layouts/Sidebar";
 import Navbar from "../../components/layouts/Navbar";
-import Footer from "../../components/layouts/Footer";
+// import Footer from "../../components/layouts/Footer";
 import Announcements from "../../components/molecules/Announcements";
 
 import {
@@ -119,7 +119,7 @@ export default function DashboardPage() {
         )}
 
         </ContentArea>
-        <Footer />
+        {/* <Footer /> */}
       </MainContent>
     </Container>
   );

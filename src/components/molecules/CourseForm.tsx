@@ -72,7 +72,7 @@ const Label = styled.label`
 
 const Input = styled.input`
   display: block;
-  width: 100%;
+  width: 90%;
   margin-top: 6px;
   padding: 8px 10px;
   border: 1px solid #ccc;
