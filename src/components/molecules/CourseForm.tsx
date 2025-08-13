@@ -78,6 +78,7 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
+  background-color: white;
 `;
 
 const Button = styled.button`

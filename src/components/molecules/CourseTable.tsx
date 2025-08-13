@@ -50,6 +50,9 @@ const TableContainer = styled.div`
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   margin-top: 20px;
 
+  max-height: 200px;       /* Limit the height */
+  overflow-y: auto;        /* Scroll vertically if needed */
+
   table {
     width: 100%;
     border-collapse: collapse;

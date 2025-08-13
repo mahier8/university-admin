@@ -70,7 +70,7 @@ export default function CoursesPage() {
             </>
           )}
         </ContentArea>
-        <Footer />
+        {/* <Footer /> */}
       </MainContent>
     </Container>
   );
@@ -89,6 +89,6 @@ const MainContent = styled.div`
 
 const ContentArea = styled.main`
   flex: 1;
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
   background-color: #f5f6fa;
 `;
