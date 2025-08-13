@@ -1,10 +1,13 @@
-// src/pages/profile/ProfilePage.tsx
 import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import Sidebar from "../../components/layouts/Sidebar";
 import Navbar from "../../components/layouts/Navbar";
 import Footer from "../../components/layouts/Footer";
 import styled from "@emotion/styled";
+
+// skeleton
+import ProfileSkeleton from "../../components/molecules/ProfileSkeleton"; 
+
 
 // Example mock users (replace with API later)
 const mockUsers = [
@@ -17,6 +20,7 @@ const mockUsers = [
 export default function ProfilePage() {
   const { user } = useAuth();
   const [selectedUserId, setSelectedUserId] = useState(user?.id);
+  const [loading, setLoading] = useState(false);
 
   // Filter selectable users based on role
   const getSelectableUsers = () => {
@@ -44,6 +48,14 @@ export default function ProfilePage() {
       <MainContent>
         <Navbar />
         <ContentArea>
+
+
+  {loading ? (
+    <ProfileSkeleton />
+  ) : (
+    <>
+
+
           <h1>My Profile</h1>
 
           {/* Role-based profile switcher */}
@@ -111,6 +123,12 @@ export default function ProfilePage() {
               </ul>
             </Section>
           )}
+
+
+      
+    </>
+)}
+
         </ContentArea>
         <Footer />
       </MainContent>

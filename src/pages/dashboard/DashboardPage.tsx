@@ -13,6 +13,8 @@ import {
 import { useState, useEffect } from "react";
 import { fetchStudentCourses } from "../../api/courseApi";
 
+import DashboardSkeleton from "../../components/molecules/DashboardSkeleton";
+
 
 const COLORS = ["#60a5fa", "#3b82f6", "#2563eb"];
 
@@ -30,14 +32,21 @@ const studentDepartments = [
 ];
 
 export default function DashboardPage() {
-    const { user } = useAuth();
-    const [courses, setCourses] = useState<{ code: string; name: string; credits: number }[]>([]);
+  const { user } = useAuth();
+  const [courses, setCourses] = useState<{ code: string; name: string; credits: number }[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-    if (user?.role === "student") {
-        fetchStudentCourses(user.id).then((data: any) => setCourses(data));
-    }
-    }, [user]);
+useEffect(() => {
+  if (!user) return; // guard until user is available
+
+  if (user.role === "student") {
+    fetchStudentCourses(user.id)
+      .then((data: any) => setCourses(data))
+      .finally(() => setLoading(false));
+  } else {
+    setLoading(false); // <-- important for admins & superadmins
+  }
+}, [user]);
 
   return (
     <Container>
@@ -45,6 +54,15 @@ export default function DashboardPage() {
       <MainContent>
         <Navbar />
         <ContentArea>
+
+        {loading ? (
+          // Show skeleton while data is loading
+          <DashboardSkeleton />
+        ) : (
+          <>
+            {/* Shared welcome message */}
+
+
           {/* Shared welcome message */}
           <WelcomeMessage>Welcome to Quick University, {user?.name}!</WelcomeMessage>
             <Announcements />
@@ -115,6 +133,11 @@ export default function DashboardPage() {
                 </tbody>
             </table>
             </CoursesContainer>
+
+
+              </>
+            )}
+
         </>
         )}
 

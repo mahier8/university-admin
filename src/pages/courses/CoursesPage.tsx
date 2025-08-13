@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import Sidebar from "../../components/layouts/Sidebar";
 import Navbar from "../../components/layouts/Navbar";
-import Footer from "../../components/layouts/Footer";
+// import Footer from "../../components/layouts/Footer";
 import CourseTable from "../../components/molecules//CourseTable";
 import CourseForm from "../../components/molecules/CourseForm";
 import styled from "@emotion/styled";
+
+import CourseSkeleton from "../../components/molecules/CourseSkeleton";
+
 
 // Mock API functions to fetch data for each role
 import { fetchAllCourses, fetchAdminCourses, fetchStudentCourses } from "../../api/courseApi";
@@ -49,7 +52,7 @@ export default function CoursesPage() {
           <h1 style={{color: "#2c3e50" }}>Courses</h1>
 
           {loading ? (
-            <p>Loading courses...</p>
+            <CourseSkeleton rows={6} />
           ) : (
             <>
               {/* Show course management tools only to superadmins and admins */}
