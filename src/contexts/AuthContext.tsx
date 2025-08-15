@@ -9,6 +9,7 @@ interface User {
   name: string;
   email: string;
   role: Role;
+  avatar?: string; 
 }
 
 interface AuthContextType {
@@ -28,8 +29,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, password: string) => {
     // Mock authentication API
     const mockUsers: User[] = [
-      { id: 1, name: "Alice Admin", email: "admin@uni.com", role: "admin" },
-      { id: 2, name: "Bob SuperAdmin", email: "super@uni.com", role: "superadmin" },
+      { id: 1, name: "Alice Admin", email: "admin@uni.com", role: "admin", avatar: "https://i.pravatar.cc/150?img=1"  },
+      { id: 2, name: "Bob SuperAdmin", email: "super@uni.com", role: "superadmin", avatar: "https://i.pravatar.cc/150?img=2"  },
       { id: 3, name: "Charlie Student", email: "student@uni.com", role: "student" },
     ];
 

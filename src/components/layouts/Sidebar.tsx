@@ -36,7 +36,7 @@ export default function Sidebar() {
 
       {!collapsed && (
         <>
-          <h2>Menu</h2>
+          {/* <h2>Menu</h2> */}
           <ul>
             <li>
               <StyledLink to="/dashboard">
@@ -110,6 +110,8 @@ const SidebarContainer = styled.aside<{ collapsed: boolean }>`
       cursor: pointer;
       display: flex;
       align-items: center;
+      border-bottom: 1px solid #e0e0e0; 
+      padding-bottom: 5px; 
 
       svg {
         margin-right: 10px;
