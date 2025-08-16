@@ -50,84 +50,84 @@ export default function ProfilePage() {
         <ContentArea>
 
 
-  {loading ? (
-    <ProfileSkeleton />
-  ) : (
-    <>
+          {loading ? (
+            <ProfileSkeleton />
+          ) : (
+            <>
 
 
-          <h1>My Profile</h1>
+                  <h1>My Profile</h1>
 
-          {/* Role-based profile switcher */}
-          {(user?.role === "superadmin" || user?.role === "admin") && (
-            <UserSelectContainer>
-              <label>
-                Select User:{" "}
-                <select value={selectedUserId} onChange={handleUserChange}>
-                  <option value={user?.id}>My Profile</option>
-                  {selectableUsers.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {u.name} ({u.role})
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </UserSelectContainer>
-          )}
+                  {/* Role-based profile switcher */}
+                  {(user?.role === "superadmin" || user?.role === "admin") && (
+                    <UserSelectContainer>
+                      <label>
+                        Select User:{" "}
+                        <select value={selectedUserId} onChange={handleUserChange}>
+                          <option value={user?.id}>My Profile</option>
+                          {selectableUsers.map((u) => (
+                            <option key={u.id} value={u.id}>
+                              {u.name} ({u.role})
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    </UserSelectContainer>
+                  )}
 
-          {/* Profile Info */}
-          <ProfileCard>
-            <p><strong>Name:</strong> {selectedUser?.name}</p>
-            <p><strong>Email:</strong> {selectedUser?.email}</p>
-            <p><strong>Role:</strong> {selectedUser?.role}</p>
-          </ProfileCard>
+                  {/* Profile Info */}
+                  <ProfileCard>
+                    <p><strong>Name:</strong> {selectedUser?.name}</p>
+                    <p><strong>Email:</strong> {selectedUser?.email}</p>
+                    <p><strong>Role:</strong> {selectedUser?.role}</p>
+                  </ProfileCard>
 
-          {/* Shared message */}
-          <Section>
-            <h3>General Information</h3>
-            <p style={{ color: "#2c3e50" }}>
-              Welcome to your profile! This section contains your basic account details.
-            </p>
-          </Section>
+                  {/* Shared message */}
+                  <Section>
+                    <h3>General Information</h3>
+                    <p style={{ color: "#2c3e50" }}>
+                      Welcome to your profile! This section contains your basic account details.
+                    </p>
+                  </Section>
 
-          {/* Role-based sections */}
-          {selectedUser?.role === "superadmin" && (
-            <Section>
-              <h3>Superadmin Tools</h3>
-              <ul>
-                <li>Manage system-wide settings</li>
-                <li>View platform usage statistics</li>
-                <li>Manage all user accounts</li>
-              </ul>
-            </Section>
-          )}
+                  {/* Role-based sections */}
+                  {selectedUser?.role === "superadmin" && (
+                    <Section>
+                      <h3>Superadmin Tools</h3>
+                      <ul>
+                        <li>Manage system-wide settings</li>
+                        <li>View platform usage statistics</li>
+                        <li>Manage all user accounts</li>
+                      </ul>
+                    </Section>
+                  )}
 
-          {selectedUser?.role === "admin" && (
-            <Section>
-              <h3>Admin Tools</h3>
-              <ul>
-                <li>Manage courses and content</li>
-                <li>View and approve student enrollments</li>
-                <li>Communicate with instructors</li>
-              </ul>
-            </Section>
-          )}
+                  {selectedUser?.role === "admin" && (
+                    <Section>
+                      <h3>Admin Tools</h3>
+                      <ul>
+                        <li>Manage courses and content</li>
+                        <li>View and approve student enrollments</li>
+                        <li>Communicate with instructors</li>
+                      </ul>
+                    </Section>
+                  )}
 
-          {selectedUser?.role === "student" && (
-            <Section>
-              <h3>Student Info</h3>
-              <ul>
-                <li>View enrolled courses</li>
-                <li>Track your grades</li>
-                <li>Update your personal details</li>
-              </ul>
-            </Section>
-          )}
+                  {selectedUser?.role === "student" && (
+                    <Section>
+                      <h3>Student Info</h3>
+                      <ul>
+                        <li>View enrolled courses</li>
+                        <li>Track your grades</li>
+                        <li>Update your personal details</li>
+                      </ul>
+                    </Section>
+                  )}
 
 
-      
-    </>
-)}
+              
+            </>
+        )}
 
         </ContentArea>
         <Footer />

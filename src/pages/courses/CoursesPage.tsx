@@ -49,7 +49,7 @@ export default function CoursesPage() {
       <MainContent>
         <Navbar />
         <ContentArea>
-          <h1 style={{color: "#2c3e50" }}>Courses</h1>
+          <CourseHeader>Courses</CourseHeader>
 
           {loading ? (
             <CourseSkeleton rows={6} />
@@ -88,6 +88,12 @@ const MainContent = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+`;
+
+const CourseHeader = styled.h1`
+  color: #2c3e50;
+  margin-top: 20px;
+  margin-bottom: 20px;
 `;
 
 const ContentArea = styled.main`
