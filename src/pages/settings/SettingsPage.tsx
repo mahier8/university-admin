@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { useAuth } from "../../contexts/AuthContext";
 import Sidebar from "../../components/layouts/Sidebar";
 import Navbar from "../../components/layouts/Navbar";
@@ -7,11 +9,18 @@ import styled from "@emotion/styled";
 export default function SettingsPage() {
   const { user } = useAuth();
 
+  const [sidebarOpen, setSidebarOpen] = useState(false); // new state
+
+  // sidebar
+  const handleHamburgerClick = () => {
+    setSidebarOpen((prev) => !prev);
+  }
+
   return (
     <Container>
-      <Sidebar />
+      <Sidebar mobileOpen={sidebarOpen} setMobileOpen={setSidebarOpen} />
       <MainContent>
-        <Navbar />
+      <Navbar onHamburgerClick={handleHamburgerClick} />
         <ContentArea>
           <h1>Settings</h1>
 

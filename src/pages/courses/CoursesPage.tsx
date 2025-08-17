@@ -18,6 +18,8 @@ export default function CoursesPage() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [sidebarOpen, setSidebarOpen] = useState(false); // new state
+
   useEffect(() => {
     if (!user) return;
 
@@ -41,39 +43,39 @@ export default function CoursesPage() {
     }
   }, [user]);
 
+  const handleHamburgerClick = () => {
+    setSidebarOpen((prev) => !prev);
+  }
+
   if (!user) return <p>Please login to view courses.</p>;
 
-  return (
+    return (
     <Container>
-      <Sidebar />
+      {/* PASS sidebarOpen and setter */}
+      <Sidebar mobileOpen={sidebarOpen} setMobileOpen={setSidebarOpen} />
       <MainContent>
-        <Navbar />
+      <Navbar onHamburgerClick={handleHamburgerClick} />
         <ContentArea>
           <CourseHeader>Courses</CourseHeader>
-
           {loading ? (
             <CourseSkeleton rows={6} />
           ) : (
             <>
-              {/* Show course management tools only to superadmins and admins */}
               {(user.role === "superadmin" || user.role === "admin") && (
                 <>
                   <CourseForm />
                   <hr />
                 </>
               )}
-
-              {/* Display course list for all roles */}
               <CourseTable courses={courses} />
-
-              {/* Extra student info */}
               {user.role === "student" && (
-                <p style={{color: "#2c3e50" }}>You are currently enrolled in {courses.length} courses.</p>
+                <p style={{ color: "#2c3e50" }}>
+                  You are currently enrolled in {courses.length} courses.
+                </p>
               )}
             </>
           )}
         </ContentArea>
-        {/* <Footer /> */}
       </MainContent>
     </Container>
   );
@@ -92,12 +94,12 @@ const MainContent = styled.div`
 
 const CourseHeader = styled.h1`
   color: #2c3e50;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  // margin-top: 20px;
+  // margin-bottom: 20px;
 `;
 
 const ContentArea = styled.main`
   flex: 1;
-  padding: 0px 20px 20px 20px;
+  padding: 20px 20px 20px 20px;
   background-color: #f5f6fa;
 `;

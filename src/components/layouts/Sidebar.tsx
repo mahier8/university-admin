@@ -1,19 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";  // Import your auth context
+import { useAuth } from "../../contexts/AuthContext";
 
 // icons
 import { FaTachometerAlt, FaBook, FaCog, FaSignOutAlt, FaUser } from "react-icons/fa";
 
+interface SidebarProps {
+  mobileOpen: boolean;
+  setMobileOpen: (open: boolean) => void;
+}
 
-export default function Sidebar() {
-  const [collapsed, setCollapsed] = useState(false);
+export default function Sidebar({ mobileOpen, setMobileOpen }: SidebarProps) {
+  const [collapsed, setCollapsed] = useState(() => window.innerWidth < 768);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const { logout } = useAuth();  
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const toggleSidebar = () => setCollapsed(!collapsed);
+  // Toggle sidebar
+  const toggleSidebar = () => {
+    if (window.innerWidth < 768) {
+      setMobileOpen(!mobileOpen);
+    } else {
+      setCollapsed(!collapsed);
+    }
+  };
+
+  // Keep sidebar responsive on resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [setMobileOpen]);
+
 
   const handleLogoutClick = () => setShowLogoutModal(true);
 
@@ -25,99 +51,95 @@ export default function Sidebar() {
 
   const cancelLogout = () => setShowLogoutModal(false);
 
-
   return (
-    <SidebarContainer collapsed={collapsed}>
-      <Hamburger onClick={toggleSidebar} collapsed={collapsed}>
-        <span />
-        <span />
-        <span />
-      </Hamburger>
+    <>
+      <SidebarContainer collapsed={collapsed} mobileOpen={mobileOpen}>
+        <Hamburger onClick={toggleSidebar} collapsed={collapsed}>
+          <span />
+          <span />
+          <span />
+        </Hamburger>
 
-      {!collapsed && (
-        <>
-          {/* <h2>Menu</h2> */}
+        {(!collapsed || mobileOpen) && (
           <ul>
             <li>
-              <StyledLink to="/dashboard">
-                <FaTachometerAlt />
-                Dashboard
-              </StyledLink>
+              <StyledLink to="/dashboard"> <FaTachometerAlt /> Dashboard </StyledLink>
             </li>
             <li>
-              <StyledLink to="/courses">
-                <FaBook />
-                Courses
-              </StyledLink>
+              <StyledLink to="/courses"> <FaBook /> Courses </StyledLink>
             </li>
             <li>
-              <StyledLink to="/profile">
-                <FaUser />
-                Profile
-              </StyledLink>
+              <StyledLink to="/profile"> <FaUser /> Profile </StyledLink>
             </li>
             <li>
-              <StyledLink to="/settings">
-                <FaCog />
-                Settings
-              </StyledLink>
+              <StyledLink to="/settings"> <FaCog /> Settings </StyledLink>
             </li>
             <li>
-              <LogoutButton onClick={handleLogoutClick}>
-                <FaSignOutAlt />
-                Logout
-              </LogoutButton>
+              <LogoutButton onClick={handleLogoutClick}> <FaSignOutAlt /> Logout </LogoutButton>
             </li>
           </ul>
-        </>
-      )}
+        )}
+      </SidebarContainer>
 
       {showLogoutModal && (
         <ModalOverlay>
           <ModalContent>
             <p>Are you sure you want to logout?</p>
             <Buttons>
-              <Button onClick={cancelLogout} cancel>
-                Cancel
-              </Button>
+              <Button onClick={cancelLogout} cancel>Cancel</Button>
               <Button onClick={confirmLogout}>Logout</Button>
             </Buttons>
           </ModalContent>
         </ModalOverlay>
       )}
-    </SidebarContainer>
+    </>
   );
 }
 
-const SidebarContainer = styled.aside<{ collapsed: boolean }>`
-  width: ${(props) => (props.collapsed ? "60px" : "160px")};
+const SidebarContainer = styled.aside<{ collapsed: boolean; mobileOpen: boolean }>`
+  width: ${(props) => (props.collapsed ? "120px" : "160px")};
   background-color: #2c3e50;
   color: white;
   padding: 20px;
   transition: width 0.3s ease;
   overflow: hidden;
+  position: relative;
 
-  h2 {
-    margin-bottom: 20px;
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: ${(props) => (props.mobileOpen ? "0" : "-160px")};
+    height: 100%;
+    z-index: 1009;
+    transition: left 0.3s ease;
   }
 
   ul {
     list-style: none;
     padding: 0;
 
-  li {
+    li {
       margin-bottom: 15px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #e0e0e0; 
-      padding-bottom: 5px; 
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 5px;
 
       svg {
         margin-right: 10px;
         font-size: 18px;
       }
     }
+  }
+
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: ${(props) => (props.mobileOpen ? "0" : "-160px")};
+    height: 100%;
+    z-index: 1000;
+    transition: left 0.3s ease;
   }
 `;
 
@@ -127,6 +149,7 @@ const Hamburger = styled.div<{ collapsed: boolean }>`
   cursor: pointer;
   margin-bottom: 20px;
   position: relative;
+  z-index: 1001; /* make sure it's above mobile sidebar */
 
   span {
     display: block;
@@ -138,7 +161,6 @@ const Hamburger = styled.div<{ collapsed: boolean }>`
     position: relative;
   }
 
-  /* Animate hamburger to X when collapsed */
   ${(props) =>
     props.collapsed &&
     `
@@ -242,4 +264,3 @@ const Button = styled.button<{ cancel?: boolean }>`
     background-color: ${(props) => (props.cancel ? "#bbb" : "#2c3e50")};
   }
 `;
-

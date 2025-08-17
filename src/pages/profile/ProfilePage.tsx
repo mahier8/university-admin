@@ -22,6 +22,9 @@ export default function ProfilePage() {
   const [selectedUserId, setSelectedUserId] = useState(user?.id);
   const [loading, setLoading] = useState(false);
 
+  // sidebar
+  const [sidebarOpen, setSidebarOpen] = useState(false); // new state
+
   // Filter selectable users based on role
   const getSelectableUsers = () => {
     if (user?.role === "superadmin") {
@@ -42,11 +45,16 @@ export default function ProfilePage() {
     setSelectedUserId(Number(e.target.value));
   };
 
+  // sidebar
+  const handleHamburgerClick = () => {
+    setSidebarOpen((prev) => !prev);
+  }
+
   return (
     <Container>
-      <Sidebar />
+      <Sidebar mobileOpen={sidebarOpen} setMobileOpen={setSidebarOpen} />
       <MainContent>
-        <Navbar />
+        <Navbar onHamburgerClick={handleHamburgerClick} />
         <ContentArea>
 
 

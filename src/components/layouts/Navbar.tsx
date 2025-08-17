@@ -2,20 +2,22 @@ import { useState, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { FaBars } from "react-icons/fa"; // Hamburger icon
 
+interface NavbarProps {
+  onHamburgerClick: () => void;
+}
 
-// 🟢 Navbar Component
-export default function Navbar() {
+export default function Navbar({ onHamburgerClick }: NavbarProps) {
+  console.log("Navbar props:", { onHamburgerClick });
+
   const { user, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-
   const navigate = useNavigate();
-
-  const profileRef = useRef<HTMLDivElement>(null); // ⬅️ reference for outside click
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const avatarUrl = user?.avatar ?? null;
-  
   const initials = user
     ? user.name
         .split(" ")
@@ -25,11 +27,10 @@ export default function Navbar() {
     : "";
 
   const handleLogoutClick = () => {
-    setShowLogoutModal(true); // open modal
-    setMenuOpen(false); // close dropdown
+    setShowLogoutModal(true);
+    setMenuOpen(false);
   };
 
-  // ⬅️ Detect clicks outside the profile wrapper
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
@@ -44,20 +45,22 @@ export default function Navbar() {
   }, []);
 
   const goToProfile = () => {
-    setMenuOpen(false); // close dropdown
-
-console.log('goToProfile')
-
-    navigate("/profile"); // redirect
+    setMenuOpen(false);
+    navigate("/profile");
   };
 
   return (
     <NavbarContainer>
+      {/* Hamburger only visible on small screens */}
+      <HamburgerButton onClick={() => { console.log("clicked"); onHamburgerClick(); }}>
+        <FaBars size={20} />
+      </HamburgerButton>
+
       <h2>University of Quick</h2>
 
       {user && (
-        <ProfileWrapper ref={profileRef}>
-          <Avatar onClick={() => setMenuOpen((prev) => !prev)}>
+        <ProfileWrapper ref={profileRef} onClick={() => setMenuOpen((prev) => !prev)}>
+          <Avatar>
             {avatarUrl ? <img src={avatarUrl} alt={user.name} /> : initials}
           </Avatar>
           <ProfileInfo>
@@ -67,22 +70,14 @@ console.log('goToProfile')
 
           {menuOpen && (
             <Dropdown>
-              <DropdownItem onClick={goToProfile}>
-                Profile
-              </DropdownItem>
-              <DropdownItem onClick={() => alert("Change Image clicked!")}>
-                Change Image
-              </DropdownItem>
-              <DropdownItem danger onClick={handleLogoutClick}>
-                Logout
-              </DropdownItem>
+              <DropdownItem onClick={goToProfile}>Profile</DropdownItem>
+              <DropdownItem onClick={() => alert("Change Image clicked!")}>Change Image</DropdownItem>
+              <DropdownItem danger onClick={handleLogoutClick}>Logout</DropdownItem>
             </Dropdown>
           )}
         </ProfileWrapper>
-
       )}
 
-      {/* Logout Modal (same as Sidebar) */}
       {showLogoutModal && (
         <ModalBackdrop>
           <Modal>
@@ -117,6 +112,18 @@ const NavbarContainer = styled.header`
   align-items: center;
   justify-content: space-between;
   position: relative;
+`;
+
+const HamburgerButton = styled.button`
+  display: none; /* hidden on desktop */
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+  background-color: #2c3e50;;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
 `;
 
 const ProfileWrapper = styled.div`

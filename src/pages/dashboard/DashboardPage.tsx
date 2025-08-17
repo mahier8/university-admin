@@ -36,23 +36,31 @@ export default function DashboardPage() {
   const [courses, setCourses] = useState<{ code: string; name: string; credits: number }[]>([]);
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  if (!user) return; // guard until user is available
+  // sidebar
+  const [sidebarOpen, setSidebarOpen] = useState(false); // new state
 
-  if (user.role === "student") {
-    fetchStudentCourses(user.id)
-      .then((data: any) => setCourses(data))
-      .finally(() => setLoading(false));
-  } else {
-    setLoading(false); // <-- important for admins & superadmins
+  useEffect(() => {
+    if (!user) return; // guard until user is available
+
+    if (user.role === "student") {
+      fetchStudentCourses(user.id)
+        .then((data: any) => setCourses(data))
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false); // <-- important for admins & superadmins
+    }
+  }, [user]);
+
+  // sidebar
+  const handleHamburgerClick = () => {
+    setSidebarOpen((prev) => !prev);
   }
-}, [user]);
 
   return (
     <Container>
-      <Sidebar />
+      <Sidebar mobileOpen={sidebarOpen} setMobileOpen={setSidebarOpen} />
       <MainContent>
-        <Navbar />
+      <Navbar onHamburgerClick={handleHamburgerClick} />
         <ContentArea>
 
         {loading ? (
