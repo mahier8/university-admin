@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import universityImage from "../../assets/images/university_image.jpg";
+import universityImage from "../../assets/images/university_pic.jpg";
 import styled from "@emotion/styled";
 
 export default function LoginPage() {
@@ -65,6 +65,28 @@ const LeftPanel = styled.div`
   align-items: center;
   justify-content: center;
   padding: 2rem;
+
+  @media (max-width: 430px) {
+    width: 100%; /* take full width */
+    background: url(${universityImage}) no-repeat center center;
+    background-size: cover;
+    position: relative;
+
+    /* Optional overlay for readability */
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4); /* darken the image */
+      border-radius: inherit;
+    }
+
+    /* Make sure content stays readable above overlay */
+    > * {
+      position: relative;
+      z-index: 1;
+    }
+  }
 `;
 
 const LoginBox = styled.div`
@@ -74,6 +96,10 @@ const LoginBox = styled.div`
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* shadow-xl */
   width: 100%;
   border: 1px solid #e5e7eb; /* border-gray-200 */
+
+  @media (max-width: 430px) {
+    margin-bottom: 130px; /* move higher on smaller screens */
+  }
 `;
 
 const Title = styled.h2`
@@ -126,6 +152,10 @@ const Button = styled.button`
 
 const RightPanel = styled.div`
   flex: 1;
+
+  @media (max-width: 430px) {
+    display: none; /* hide the right panel */
+  }
 `;
 
 const Image = styled.img`

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import Sidebar from "../../components/layouts/Sidebar";
 import Navbar from "../../components/layouts/Navbar";
-import Footer from "../../components/layouts/Footer";
+// import Footer from "../../components/layouts/Footer";
 import styled from "@emotion/styled";
 
 export default function SettingsPage() {
@@ -57,7 +57,7 @@ export default function SettingsPage() {
             </Section>
           )}
         </ContentArea>
-        <Footer />
+        {/* <Footer /> */}
       </MainContent>
     </Container>
   );

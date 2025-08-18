@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FaBars } from "react-icons/fa"; // Hamburger icon
+import { FaUser, FaImage, FaSignOutAlt } from "react-icons/fa";
 
 interface NavbarProps {
   onHamburgerClick: () => void;
@@ -70,9 +71,15 @@ export default function Navbar({ onHamburgerClick }: NavbarProps) {
 
           {menuOpen && (
             <Dropdown>
-              <DropdownItem onClick={goToProfile}>Profile</DropdownItem>
-              <DropdownItem onClick={() => alert("Change Image clicked!")}>Change Image</DropdownItem>
-              <DropdownItem danger onClick={handleLogoutClick}>Logout</DropdownItem>
+              <DropdownItem onClick={goToProfile}>
+                <FaUser /> Profile
+              </DropdownItem>
+              <DropdownItem onClick={() => alert("Change Image clicked!")}>
+                <FaImage /> Change Image
+              </DropdownItem>
+              <DropdownItem danger onClick={handleLogoutClick}>
+                <FaSignOutAlt /> Logout
+              </DropdownItem>
             </Dropdown>
           )}
         </ProfileWrapper>
@@ -81,7 +88,6 @@ export default function Navbar({ onHamburgerClick }: NavbarProps) {
       {showLogoutModal && (
         <ModalBackdrop>
           <Modal>
-            <h3>Confirm Logout</h3>
             <p>Are you sure you want to logout?</p>
             <ModalActions>
               <button onClick={() => setShowLogoutModal(false)}>Cancel</button>
@@ -187,6 +193,14 @@ const DropdownItem = styled.div<{ danger?: boolean }>`
   font-size: 0.9rem;
   color: ${(p) => (p.danger ? "#e74c3c" : "#2c3e50")};
   transition: background 0.2s;
+  display: flex;          
+  align-items: center;    
+  gap: 8px;               
+
+  svg {
+    font-size: 16px;      
+    flex-shrink: 0;       
+  }
 
   &:hover {
     background: #f5f6fa;
@@ -212,8 +226,10 @@ const Modal = styled.div`
   border-radius: 8px;
   width: 300px;
 
-  h3 {
-    margin-top: 0;
+  p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: #333;
   }
 `;
 
@@ -222,6 +238,7 @@ const ModalActions = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  justify-content: space-around;
 
   button {
     padding: 6px 12px;
@@ -236,7 +253,7 @@ const ModalActions = styled.div`
   }
 
   button:last-of-type {
-    background: #e74c3c;
+    background-color: #2c3e50;
     color: white;
   }
 `;

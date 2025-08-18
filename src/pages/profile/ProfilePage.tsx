@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import Sidebar from "../../components/layouts/Sidebar";
 import Navbar from "../../components/layouts/Navbar";
-import Footer from "../../components/layouts/Footer";
+// import Footer from "../../components/layouts/Footer";
 import styled from "@emotion/styled";
 
 // skeleton
@@ -72,7 +72,7 @@ export default function ProfilePage() {
                       <label>
                         Select User:{" "}
                         <select value={selectedUserId} onChange={handleUserChange}>
-                          <option value={user?.id}>My Profile</option>
+                          <option value={user?.id}>{user?.name}</option>
                           {selectableUsers.map((u) => (
                             <option key={u.id} value={u.id}>
                               {u.name} ({u.role})
@@ -138,7 +138,7 @@ export default function ProfilePage() {
         )}
 
         </ContentArea>
-        <Footer />
+        {/* <Footer /> */}
       </MainContent>
     </Container>
   );
@@ -169,17 +169,44 @@ const ContentArea = styled.main`
 `;
 
 const UserSelectContainer = styled.div`
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   background: white;
-  padding: 10px;
+  padding: 12px 16px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  label {
+    font-weight: bolder;
+    color: #2c3e50;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
 
   select {
-    margin-left: 8px;
-    padding: 4px;
+    flex: 1; /* takes available space */
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+    color: #2c3e50;
+    background-color: #f9f9f9;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      border-color: #bbb;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #2c3e50;
+      box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.2);
+    }
   }
 `;
+
 
 const ProfileCard = styled.div`
   background: white;

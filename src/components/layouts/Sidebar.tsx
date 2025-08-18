@@ -160,6 +160,10 @@ const Hamburger = styled.div<{ collapsed: boolean }>`
     transition: all 0.3s ease;
     position: relative;
   }
+    
+  @media (min-width: 769px) {
+    display: none;
+  }
 
   ${(props) =>
     props.collapsed &&
