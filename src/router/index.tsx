@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "./ProtectedRoute";
+import AppSkeleton from "../components/molecules/AppSkeleton";
 
 // Lazy load pages
 const LoginPage = lazy(() => import("../pages/auth/LoginPage"));
@@ -11,9 +12,16 @@ const ProfilePage = lazy(() => import("../pages/profile/ProfilePage"));
 
 export function AppRoutes() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<AppSkeleton />}>      
       <Routes>
+
+        {/* Redirect root to login */}
+        <Route path="/" element={<Navigate to="/login" />} />
+
+        {/* Public route */}
         <Route path="/login" element={<LoginPage />} />
+
+        {/* Protected routes */}
         <Route
           path="/dashboard"
           element={
@@ -46,6 +54,8 @@ export function AppRoutes() {
             </ProtectedRoute>
           }
         />
+
+        {/* Catch-all */}
         <Route path="*" element={<p>Page Not Found</p>} />
       </Routes>
     </Suspense>

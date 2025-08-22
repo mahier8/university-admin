@@ -60,7 +60,9 @@ export default function LoginPage() {
       </LeftPanel>
 
       <RightPanel>
-        <Image src={universityImage} alt="University Campus" />
+        <ImageContainer>
+          <Image src={universityImage} alt="University Campus" />
+        </ImageContainer>
       </RightPanel>
     </Container>
   );
@@ -75,28 +77,29 @@ const Container = styled.div`
 
 const LeftPanel = styled.div`
   width: 300px;
-  background-color: #f9fafb; /* bg-gray-50 */
+  height: 100vh; /* Always full screen */
+  background-color: #f9fafb;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 0 2rem; /* ✅ no top/bottom padding */
 
   @media (max-width: 430px) {
-    width: 100%; /* take full width */
+    width: 100%; 
+    height: 100vh;
     background: url(${universityImage}) no-repeat center center;
     background-size: cover;
     position: relative;
+    padding: 0 1.5rem; /* ✅ horizontal padding only */
 
-    /* Optional overlay for readability */
     &::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.4); /* darken the image */
+      background: rgba(0, 0, 0, 0.4);
       border-radius: inherit;
     }
 
-    /* Make sure content stays readable above overlay */
     > * {
       position: relative;
       z-index: 1;
@@ -112,11 +115,15 @@ const LoginBox = styled.div`
   width: 100%;
   border: 1px solid #e5e7eb; /* border-gray-200 */
 
+
+  // align-items: center;
+  // justify-content: center;
+
   @media (max-width: 430px) {
     // margin-bottom: 130px; /* move higher on smaller screens */
   }
 
-  @media (max-width: 375px) {
+  @media (max-width: 540px) {
     max-width: 320px; /* shrink box on very small screens */
     padding: 0.7rem; /* reduce padding a bit so it fits nicely */
   }
@@ -150,28 +157,30 @@ const Input = styled.input`
   border: 1px solid #d1d5db; /* border */
   border-radius: 0.5rem; /* rounded-lg */
   outline: none;
-  transition: box-shadow 0.2s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.2s ease;
 
   &:focus {
     box-shadow: 0 0 0 2px #60a5fa; /* focus:ring-2 focus:ring-blue-400 */
     border-color: #60a5fa;
   }
 
-  /* Fix autofill styling */
+  /* Chrome, Edge, Safari */
   &:-webkit-autofill {
     background-color: #f9fafb !important;
     color: #374151 !important;
     -webkit-box-shadow: 0 0 0px 1000px #f9fafb inset !important;
     -webkit-text-fill-color: #374151 !important;
-    transition: background-color 5000s ease-in-out 0s; /* trick to disable autofill bg */
+    transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
   }
 
   /* Firefox */
   &:-moz-autofill {
     box-shadow: 0 0 0px 1000px #f9fafb inset !important;
     -moz-text-fill-color: #374151 !important;
+    transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
   }
 `;
+
 
 const Button = styled.button`
   width: 100%;
@@ -191,16 +200,35 @@ const Button = styled.button`
 
 const RightPanel = styled.div`
   flex: 1;
-
+  position: relative; /* makes container a reference for the image */
+  overflow: hidden;   /* anything outside the container is clipped */
+  
   @media (max-width: 430px) {
-    display: none; /* hide the right panel */
+    display: none;
   }
 `;
 
-const Image = styled.img`
+const ImageContainer = styled.div`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  position: relative; /* necessary if you position the image absolutely inside */
+`;
+
+const Image = styled.img`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  // width: auto;       /* let width scale */
+  height: 100%;      /* image always fills container height */
+  transform: translate(-50%, -50%); /* center the image */
+  object-fit: cover; 
+  width: 100%;
+
+  /* Media query for very wide screens */
+  @media (min-width: 1700px) { /* adjust breakpoint as needed */
+    top: 30%;                 /* move the visible area upwards */
+    transform: translate(-50%, -30%);
+  }
 `;
 
 const DemoBox = styled.div`
