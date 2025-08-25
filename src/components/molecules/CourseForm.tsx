@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
+import { useSetAtom } from "jotai";
+import { addCourseAtom } from "../atoms/courseAtoms";
 
 interface CourseFormProps {
-  // Optional: add callback prop to handle new course submission
+  onCourseAdded?: () => void; // ✅ optional callback
 }
 
-export default function CourseForm() {
+export default function CourseForm({ onCourseAdded }: CourseFormProps) {
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [credits, setCredits] = useState<number | "">("");
+  const addCourse = useSetAtom(addCourseAtom); // jotai setter
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,7 +19,13 @@ export default function CourseForm() {
       alert("Please fill all fields.");
       return;
     }
-    alert(`Course Added:\nCode: ${code}\nName: ${name}\nCredits: ${credits}`);
+
+    // Add new course to jotai + localStorage
+    addCourse({ code, name, credits: Number(credits) });
+
+    // Call parent handler
+    onCourseAdded?.();
+
     // Reset form
     setCode("");
     setName("");
@@ -50,6 +59,7 @@ export default function CourseForm() {
   );
 }
 
+
 const FormContainer = styled.form`
   background: white;
   padding: 16px;
@@ -79,6 +89,7 @@ const Input = styled.input`
   border-radius: 6px;
   font-size: 1rem;
   background-color: white;
+  color: #2c3e50;
 `;
 
 const Button = styled.button`

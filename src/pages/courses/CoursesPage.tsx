@@ -1,79 +1,74 @@
-import { useEffect, useState } from "react";
+import { useState, useRef } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import Sidebar from "../../components/layouts/Sidebar";
 import Navbar from "../../components/layouts/Navbar";
-// import Footer from "../../components/layouts/Footer";
-import CourseTable from "../../components/molecules//CourseTable";
+import CourseTable from "../../components/molecules/CourseTable";
 import CourseForm from "../../components/molecules/CourseForm";
 import styled from "@emotion/styled";
-
-import CourseSkeleton from "../../components/molecules/CourseSkeleton";
-
-
-// Mock API functions to fetch data for each role
-import { fetchAllCourses, fetchAdminCourses, fetchStudentCourses } from "../../api/courseApi";
+import { useAtomValue } from "jotai";
+import { coursesAtom } from "../../components/atoms/courseAtoms";
+import { useToast } from "../../contexts/ToastContext";
 
 export default function CoursesPage() {
   const { user } = useAuth();
-  const [courses, setCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const courses = useAtomValue(coursesAtom); // ✅ get reactive courses from jotai
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const [sidebarOpen, setSidebarOpen] = useState(false); // new state
 
-  useEffect(() => {
-    if (!user) return;
+  // const [showMessage, setShowMessage] = useState(false);
 
-    setLoading(true);
+  const { showToast } = useToast();
+  
+  // Ref to scroll the table into view
+  const tableRef = useRef<HTMLDivElement | null>(null);
 
-    if (user.role === "superadmin") {
-      fetchAllCourses().then(data => {
-        setCourses(data);
-        setLoading(false);
-      });
-    } else if (user.role === "admin") {
-      fetchAdminCourses(user.id).then(data => {
-        setCourses(data);
-        setLoading(false);
-      });
-    } else if (user.role === "student") {
-      fetchStudentCourses(user.id).then(data => {
-        setCourses(data);
-        setLoading(false);
-      });
-    }
-  }, [user]);
 
-  const handleHamburgerClick = () => {
-    setSidebarOpen((prev) => !prev);
-  }
+
 
   if (!user) return <p>Please login to view courses.</p>;
 
-    return (
+  const handleHamburgerClick = () => {
+    setSidebarOpen((prev) => !prev);
+  };
+
+
+  // Called after CourseForm adds a new course via Jotai
+  const handleCourseAdded = () => {
+    showToast("✅ Course added!");
+
+    // Scroll to table after DOM update
+    setTimeout(() => {
+      tableRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
+
+
+  return (
     <Container>
-      {/* PASS sidebarOpen and setter */}
       <Sidebar mobileOpen={sidebarOpen} setMobileOpen={setSidebarOpen} />
       <MainContent>
-      <Navbar onHamburgerClick={handleHamburgerClick} />
+        <Navbar onHamburgerClick={handleHamburgerClick} />
         <ContentArea>
           <CourseHeader>Courses</CourseHeader>
-          {loading ? (
-            <CourseSkeleton rows={6} />
-          ) : (
+
+          {(user.role === "superadmin" || user.role === "admin") && (
             <>
-              {(user.role === "superadmin" || user.role === "admin") && (
-                <>
-                  <CourseForm />
-                  <hr />
-                </>
-              )}
-              <CourseTable courses={courses} />
-              {user.role === "student" && (
-                <p style={{ color: "#2c3e50" }}>
-                  You are currently enrolled in {courses.length} courses.
-                </p>
-              )}
+              <CourseForm onCourseAdded={handleCourseAdded} />
+              <hr />
             </>
+          )}
+
+          {/* table wrapper with ref */}
+          <div ref={tableRef}>
+            <CourseTable courses={courses} />
+          </div>
+
+
+          {user.role === "student" && (
+            <p style={{ color: "#2c3e50" }}>
+              You are currently enrolled in {courses.length} courses.
+            </p>
           )}
         </ContentArea>
       </MainContent>
