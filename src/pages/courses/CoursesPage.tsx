@@ -14,16 +14,10 @@ export default function CoursesPage() {
   const courses = useAtomValue(coursesAtom); // ✅ get reactive courses from jotai
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-
-  // const [showMessage, setShowMessage] = useState(false);
-
   const { showToast } = useToast();
   
   // Ref to scroll the table into view
-  const tableRef = useRef<HTMLDivElement | null>(null);
-
-
-
+  const tableContainerRef = useRef<HTMLDivElement | null>(null);
 
   if (!user) return <p>Please login to view courses.</p>;
 
@@ -31,15 +25,19 @@ export default function CoursesPage() {
     setSidebarOpen((prev) => !prev);
   };
 
-
   // Called after CourseForm adds a new course via Jotai
   const handleCourseAdded = () => {
     showToast("✅ Course added!");
 
-    // Scroll to table after DOM update
     setTimeout(() => {
-      tableRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+      const container = tableContainerRef.current;
+      if (container) {
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    }, 50); // 50ms is enough for React to render new row
   };
 
 
@@ -58,11 +56,10 @@ export default function CoursesPage() {
               <hr />
             </>
           )}
-
-          {/* table wrapper with ref */}
-          <div ref={tableRef}>
+          {/* Table wrapper with scroll ref */}
+          <TableWrapper ref={tableContainerRef}>
             <CourseTable courses={courses} />
-          </div>
+          </TableWrapper>
 
 
           {user.role === "student" && (
@@ -75,6 +72,12 @@ export default function CoursesPage() {
     </Container>
   );
 }
+
+const TableWrapper = styled.div`
+  max-height: 300px;  /* your scroll height */
+  overflow-y: auto;
+  margin-top: 20px;
+`;
 
 const Container = styled.div`
   display: flex;

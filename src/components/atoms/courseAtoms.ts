@@ -29,3 +29,14 @@ export const addCourseAtom = atom(
     localStorage.setItem("courses", JSON.stringify(updated));
   }
 );
+
+export const removeCourseAtom = atom(
+  null,
+  (get, set, courseId: number) => {
+    const current = get(coursesAtom);
+    const updated = current.filter(c => c.id !== courseId);
+    set(coursesAtom, updated);
+    localStorage.setItem("courses", JSON.stringify(updated));
+  }
+);
+

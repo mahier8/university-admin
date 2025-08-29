@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "@emotion/styled";
 
+// jotai
+import { useSetAtom } from "jotai";
+import { removeCourseAtom } from "../atoms/courseAtoms";
+
 interface Course {
   id: number;
   code: string;
@@ -13,6 +17,8 @@ interface CourseTableProps {
 }
 
 export default function CourseTable({ courses }: CourseTableProps) {
+  const removeCourse = useSetAtom(removeCourseAtom);
+  
   return (
     <TableContainer>
       <table>
@@ -21,6 +27,7 @@ export default function CourseTable({ courses }: CourseTableProps) {
             <th>Course Code</th>
             <th>Course Name</th>
             <th>Credits</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -34,6 +41,11 @@ export default function CourseTable({ courses }: CourseTableProps) {
                 <td style={{color: "#2c3e50" }}>{course.code}</td>
                 <td style={{color: "#2c3e50" }}>{course.name}</td>
                 <td style={{color: "#2c3e50" }}>{course.credits}</td>
+                <td>
+                  <DeleteButton onClick={() => removeCourse(course.id)}>
+                    Delete
+                  </DeleteButton>
+                </td>
               </tr>
             ))
           )}
@@ -50,8 +62,8 @@ const TableContainer = styled.div`
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   margin-top: 20px;
 
-  max-height: 200px;       /* Limit the height */
-  overflow-y: auto;        /* Scroll vertically if needed */
+  // max-height: 200px;       /* Limit the height */
+  // overflow-y: auto;        /* Scroll vertically if needed */
 
   table {
     width: 100%;
@@ -67,5 +79,19 @@ const TableContainer = styled.div`
   th {
     background-color: #f5f6fa;
     color: #2c3e50;
+  }
+`;
+
+const DeleteButton = styled.button`
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover {
+    background: #b91c1c;
   }
 `;
