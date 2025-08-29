@@ -12,14 +12,14 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ mobileOpen, setMobileOpen }: SidebarProps) {
-  const [collapsed, setCollapsed] = useState(() => window.innerWidth < 768);
+  const [collapsed, setCollapsed] = useState(() => window.innerWidth < 769);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
 
   // Toggle sidebar
   const toggleSidebar = () => {
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < 769) {
       setMobileOpen(!mobileOpen);
     } else {
       setCollapsed(!collapsed);
@@ -29,7 +29,7 @@ export default function Sidebar({ mobileOpen, setMobileOpen }: SidebarProps) {
   // Keep sidebar responsive on resize
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
+      if (window.innerWidth <= 769) {
         setCollapsed(true);
       } else {
         setCollapsed(false);
@@ -105,7 +105,7 @@ const SidebarContainer = styled.aside<{ collapsed: boolean; mobileOpen: boolean 
   overflow: hidden;
   position: relative;
 
-  @media (max-width: 768px) {
+  @media (max-width: 769px) {
     position: fixed;
     top: 0;
     left: ${(props) => (props.mobileOpen ? "0" : "-160px")};
