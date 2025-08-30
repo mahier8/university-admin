@@ -5,6 +5,9 @@ import styled from "@emotion/styled";
 import { useSetAtom } from "jotai";
 import { removeCourseAtom } from "../atoms/courseAtoms";
 
+// context
+import { useAuth } from "../../contexts/AuthContext";
+
 interface Course {
   id: number;
   code: string;
@@ -19,6 +22,9 @@ interface CourseTableProps {
 export default function CourseTable({ courses }: CourseTableProps) {
   const removeCourse = useSetAtom(removeCourseAtom);
   
+  // uget the users
+  const { user } = useAuth();
+
   return (
     <TableContainer>
       <table>
@@ -41,11 +47,17 @@ export default function CourseTable({ courses }: CourseTableProps) {
                 <td style={{color: "#2c3e50" }}>{course.code}</td>
                 <td style={{color: "#2c3e50" }}>{course.name}</td>
                 <td style={{color: "#2c3e50" }}>{course.credits}</td>
+                
+                          {user?.role === "superadmin" && (
+
                 <td>
                   <DeleteButton onClick={() => removeCourse(course.id)}>
                     Delete
                   </DeleteButton>
                 </td>
+
+          )}
+
               </tr>
             ))
           )}
